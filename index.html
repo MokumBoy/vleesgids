@@ -101,59 +101,30 @@
   </div></div>
 </div>
 <script>
-
-  
-et cuts = [];
+let cuts = [];
 
 fetch('cuts_full_v8_pro.json')
 .then(res => res.json())
 .then(data => {
 
-  cuts = data.cuts;
+  // 🔥 mapping naar jouw originele structuur
+  cuts = data.cuts.map(c => ({
+    primal: c.primal,
+    cut: c.cut_en,
+    nl: c.cut_nl,
+    temp: c.kerntemperatuur,
+    method: Array.isArray(c.bereidingswijze) ? c.bereidingswijze.join(', ') : c.bereidingswijze,
+    m: c.malsheid,
+    v: c.vet,
+    c: c.collageen,
+    advies: c.auto_advies,
+    recipes: c.gerechten || []
+  }));
 
-  init();
+  // 🔥 BELANGRIJK: bestaande code laten draaien
+  startApp();
 
 });
-
-function init(){
-
-  const primalFilter = document.getElementById('primalFilter');
-
-  [...new Set(cuts.map(c => c.primal))].forEach(v=>{
-    const o=document.createElement('option');
-    o.value=v;
-    o.textContent=v;
-    primalFilter.appendChild(o);
-  });
-
-  render();
-}
-
-function render(){
-
-  const list = document.getElementById('cutList');
-  list.innerHTML='';
-
-  cuts.slice(0,50).forEach(c=>{
-
-    const d=document.createElement('div');
-    d.className='cut';
-
-    d.innerHTML = `
-      <b>${c.cut_nl}</b><br>
-      ${c.diersoort} - ${c.primal}<br>
-      ${c.auto_advies}
-    `;
-
-    list.appendChild(d);
-
-  });
-}
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-
 
 const primalFilter = document.getElementById('primalFilter');
 const methodFilter = document.getElementById('methodFilter');
