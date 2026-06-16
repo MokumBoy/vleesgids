@@ -1,7 +1,7 @@
 {
   "meta": {
     "app_name": "ChefCuts V8 PRO",
-    "version": "V8 PRO Full Standalone",
+    "version": "Full mapping from recreated V7 source model",
     "records_total": 320,
     "records_per_species": {
       "Rund": 80,
@@ -9,6 +9,7 @@
       "Gevogelte": 80,
       "Wild": 80
     },
+    "mapping_note": "JSON is gereconstrueerd uit hetzelfde V7-bronmodel dat is gebruikt om het 320-cuts werkboek te genereren.",
     "price_note": "Prijs per kilo is synthetisch/indicatief en niet gebaseerd op live marktdata."
   },
   "insights": {
@@ -25607,7 +25608,7 @@
       "cut_en": "Venison Leg Roast",
       "cut_nl": "Hertenbout roast",
       "niveau": "Subprimal / roast",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -25619,7 +25620,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -25810,7 +25811,7 @@
       "cut_en": "Venison Shoulder Roast",
       "cut_nl": "Venison Shoulder Roast",
       "niveau": "Subprimal / roast",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -25822,7 +25823,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -26013,7 +26014,7 @@
       "cut_en": "Venison Neck Fillet",
       "cut_nl": "Venison Neck Fillet",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -26025,7 +26026,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -26115,7 +26116,7 @@
       "cut_en": "Venison Neck Roast",
       "cut_nl": "Venison Neck Roast",
       "niveau": "Subprimal / roast",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -26127,7 +26128,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -26217,7 +26218,7 @@
       "cut_en": "Venison Shank",
       "cut_nl": "Venison Shank",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -26229,7 +26230,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -26420,7 +26421,7 @@
       "cut_en": "Venison Ribs",
       "cut_nl": "Venison Ribs",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -26432,7 +26433,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -27535,7 +27536,7 @@
       "cut_en": "Wild Boar Shoulder Roast",
       "cut_nl": "Wild Boar Shoulder Roast",
       "niveau": "Subprimal / roast",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -27547,7 +27548,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 3,
@@ -27738,7 +27739,7 @@
       "cut_en": "Wild Boar Neck",
       "cut_nl": "Wild Boar Neck",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -27750,7 +27751,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 3,
@@ -27941,7 +27942,7 @@
       "cut_en": "Wild Boar Leg Roast",
       "cut_nl": "Wild Boar Leg Roast",
       "niveau": "Subprimal / roast",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -27953,7 +27954,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 3,
@@ -28144,7 +28145,7 @@
       "cut_en": "Wild Boar Ribs",
       "cut_nl": "Wild Boar Ribs",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -28156,7 +28157,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 3,
@@ -28246,7 +28247,7 @@
       "cut_en": "Wild Boar Shank",
       "cut_nl": "Wild Boar Shank",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -28258,7 +28259,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 3,
@@ -29158,7 +29159,7 @@
       "cut_en": "Hare Shoulder",
       "cut_nl": "Hare Shoulder",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -29170,7 +29171,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
@@ -29969,7 +29970,7 @@
       "cut_en": "Rabbit Shoulder",
       "cut_nl": "Rabbit Shoulder",
       "niveau": "Retail / portion cut",
-      "kerntemperatuur": "68-75°C stoof / hoger pour low & slow",
+      "kerntemperatuur": "68-75°C stoof / hoger voor low & slow",
       "eigenschappen": "sterke vezel, wildaroma, langzaam garen loont",
       "bereidingswijze": [
         "stoven",
@@ -29981,7 +29982,7 @@
         "ragout",
         "braadstuk",
         "jachtschotel",
-        "sauce base"
+        "sausbasis"
       ],
       "malsheid": 2,
       "vet": 1,
