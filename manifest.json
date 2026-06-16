@@ -1,8 +1,9 @@
 {
-  "name": "ChefCuts V8 PRO",
+  "name": "ChefCuts iPhone Prototype",
   "short_name": "ChefCuts",
-  "start_url": "/chefcuts-app/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5f7fa",
-  "theme_color": "#123b5d"
+  "theme_color": "#123b5d",
+  "icons": []
 }
