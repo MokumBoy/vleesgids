@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChefCuts iPhone Prototype</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#123b5d">
+
+<style>
+  :root{--nav:#123b5d;--bg:#f5f7fa;--card:#ffffff;--ok:#cfe8c6;--mid:#fff2c7;--bad:#f5cccc;--txt:#1d2a33;--muted:#5c6b76}
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt)}
+  .phone{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg)}
+  .hero{background:linear-gradient(135deg,var(--nav),#1b5a8f);color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:2}
+  .hero h1{margin:0;font-size:24px} .hero p{margin:.35rem 0 0;font-size:13px;opacity:.95}
+  .wrap{padding:14px 14px 90px}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .seg button,.filter select{border:none;border-radius:12px;padding:12px;background:#e8eef4;color:var(--txt);font-weight:600}
+  .seg button.active{background:var(--nav);color:#fff}
+  .filter{display:grid;gap:8px;margin-bottom:12px}
+  .card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:12px}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{background:#fff;border-radius:14px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .kpi .label{font-size:12px;color:var(--muted)}
+  .kpi .value{font-size:22px;font-weight:800;margin-top:2px}
+  .title{font-size:16px;font-weight:800;margin-bottom:10px}
+  .cut{padding:12px;border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:10px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .pill{font-size:11px;border-radius:999px;padding:6px 8px;background:#eef2f6;color:#30404c}
+  .heat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .score{border-radius:12px;padding:10px;text-align:center;font-weight:700}
+  .s1,.s2{background:var(--bad)} .s3{background:var(--mid)} .s4,.s5{background:var(--ok)}
+  .small{font-size:12px;color:var(--muted)}
+  .recipes{font-size:13px;line-height:1.4;margin-top:8px}
+  .tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;box-shadow:0 -6px 18px rgba(0,0,0,.08)}
+  .tabsin{max-width:430px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+  .tab{padding:12px 6px;text-align:center;font-size:12px;color:var(--muted)}
+  .tab.active{color:var(--nav);font-weight:800}
+  .hidden{display:none}
+</style>
+</head>
+
+<body>
+<div class="phone">
+
+<div class="hero">
+  <h1>ChefCuts</h1>
+</div>
+
+<div class="wrap">
+
+<div class="filter">
+<select id="primalFilter"><option value="Alle">Alle</option></select>
+<select id="methodFilter"><option value="Alle">Alle</option></select>
+</div>
+
+<div id="cutList"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let cuts = [];
+
+fetch('cuts_full_v8_pro.json')
+.then(res => res.json())
+.then(data => {
+
+  cuts = data.cuts;
+
+  init();
+
+});
+
+function init(){
+
+  const primalFilter = document.getElementById('primalFilter');
+
+  [...new Set(cuts.map(c => c.primal))].forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent=v;
+    primalFilter.appendChild(o);
+  });
+
+  render();
+}
+
+function render(){
+
+  const list = document.getElementById('cutList');
+  list.innerHTML='';
+
+  cuts.slice(0,50).forEach(c=>{
+
+    const d=document.createElement('div');
+    d.className='cut';
+
+    d.innerHTML = `
+      <b>${c.cut_nl}</b><br>
+      ${c.diersoort} - ${c.primal}<br>
+      ${c.auto_advies}
+    `;
+
+    list.appendChild(d);
+
+  });
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
+</script>
+
+</body>
+</html>
