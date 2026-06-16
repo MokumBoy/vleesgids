@@ -68,52 +68,105 @@ fetch('cuts_full_v8_pro.json')
 .then(res => res.json())
 .then(data => {
 
-  cuts = data.cuts;
+  // 🔥 mapping naar jouw originele structuur
+  cuts = data.cuts.map(c => ({
+    primal: c.primal,
+    cut: c.cut_en,
+    nl: c.cut_nl,
+    temp: c.kerntemperatuur,
+    method: Array.isArray(c.bereidingswijze) ? c.bereidingswijze.join(', ') : c.bereidingswijze,
+    m: c.malsheid,
+    v: c.vet,
+    c: c.collageen,
+    advies: c.auto_advies,
+    recipes: c.gerechten || []
+  }));
 
   init();
 
 });
 
+const primalFilter = document.getElementById('primalFilter');
+const methodFilter = document.getElementById('methodFilter');
+
 function init(){
 
-  const primalFilter = document.getElementById('primalFilter');
-
-  [...new Set(cuts.map(c => c.primal))].forEach(v=>{
+  [...new Set(cuts.map(c=>c.primal))].sort().forEach(v=>{
     const o=document.createElement('option');
     o.value=v;
-    o.textContent=v;
+    o.textContent='USDA primal: '+v;
     primalFilter.appendChild(o);
+  });
+
+  [...new Set(cuts.map(c=>c.method))].sort().forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent='Bereidingswijze: '+v;
+    methodFilter.appendChild(o);
   });
 
   render();
 }
 
+function filtered(){
+  const pf=primalFilter.value, mf=methodFilter.value;
+  return cuts.filter(c => (pf==='Alle'||c.primal===pf) && (mf==='Alle'||c.method===mf));
+}
+
+function bestGrill(arr){return [...arr].sort((a,b)=>(b.m+b.v)-(a.m+a.v) || a.c-b.c)[0]}
+function bestSlow(arr){return [...arr].sort((a,b)=>b.c-a.c || b.v-a.v)[0]}
+function bestAllround(arr){return [...arr].sort((a,b)=>((b.m+b.v+(6-Math.abs(b.c-3)))-(a.m+a.v+(6-Math.abs(a.c-3)))))[0]}
+
 function render(){
+
+  const arr=filtered();
+
+  document.getElementById('kpiCount').textContent=arr.length;
+  document.getElementById('kpiGrill').textContent=(bestGrill(arr)||{}).cut||'-';
+  document.getElementById('kpiSlow').textContent=(bestSlow(arr)||{}).cut||'-';
+  document.getElementById('kpiAllround').textContent=(bestAllround(arr)||{}).cut||'-';
 
   const list = document.getElementById('cutList');
   list.innerHTML='';
 
-  cuts.slice(0,50).forEach(c=>{
+  [...arr].sort((a,b)=>(b.m+b.v+b.c)-(a.m+a.v+a.c)).forEach(c=>{
 
     const d=document.createElement('div');
     d.className='cut';
 
-    d.innerHTML = `
-      <b>${c.cut_nl}</b><br>
-      ${c.diersoort} - ${c.primal}<br>
-      ${c.auto_advies}
+    d.innerHTML=`
+      <div style="font-weight:800;font-size:18px">${c.cut}</div>
+      <div class="small">${c.nl} · ${c.primal}</div>
+      <div class="meta">
+        <span class="pill">${c.temp}</span>
+        <span class="pill">${c.method}</span>
+        <span class="pill">${c.advies}</span>
+      </div>
+      <div class="heat">
+        <div class="score s${c.m}">Malsheid<br>${c.m}</div>
+        <div class="score s${c.v}">Vet<br>${c.v}</div>
+        <div class="score s${c.c}">Collageen<br>${c.c}</div>
+      </div>
+      <div class="recipes">
+        <b>Top gerechten:</b> ${c.recipes.join(', ')}
+      </div>
     `;
 
     list.appendChild(d);
 
   });
+
 }
+
+primalFilter.addEventListener('change',render);
+methodFilter.addEventListener('change',render);
+
+render();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
 </script>
-
 </body>
 </html>
