@@ -1,0 +1,8 @@
+{
+  "name": "ChefCuts V8 PRO",
+  "short_name": "ChefCuts",
+  "start_url": "/chefcuts-app/index.html",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#123b5d"
+}

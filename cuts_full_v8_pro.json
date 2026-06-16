@@ -1,0 +1,16 @@
+{
+  "cuts": [
+    {
+      "cut": "Ribeye",
+      "diersoort": "Rund"
+    },
+    {
+      "cut": "Picanha",
+      "diersoort": "Rund"
+    },
+    {
+      "cut": "Chicken Breast",
+      "diersoort": "Gevogelte"
+    }
+  ]
+}
