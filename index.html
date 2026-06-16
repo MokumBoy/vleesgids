@@ -6,7 +6,6 @@
 <title>ChefCuts iPhone Prototype</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#123b5d">
-
 <style>
   :root{--nav:#123b5d;--bg:#f5f7fa;--card:#ffffff;--ok:#cfe8c6;--mid:#fff2c7;--bad:#f5cccc;--txt:#1d2a33;--muted:#5c6b76}
   *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt)}
@@ -37,136 +36,175 @@
   .tab{padding:12px 6px;text-align:center;font-size:12px;color:var(--muted)}
   .tab.active{color:var(--nav);font-weight:800}
   .hidden{display:none}
+  ul.tight{padding-left:18px;margin:.4rem 0}
 </style>
 </head>
-
 <body>
 <div class="phone">
+  <div class="hero">
+    <h1>ChefCuts</h1>
+    <p>iPhone prototype op basis van jouw rundvlees-dashboard</p>
+  </div>
+  <div class="wrap">
+    <section id="screen-dashboard">
+      <div class="filter">
+        <select id="primalFilter"><option value="Alle">USDA primal: Alle</option></select>
+        <select id="methodFilter"><option value="Alle">Bereidingswijze: Alle</option></select>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Cuts in selectie</div><div class="value" id="kpiCount">0</div></div>
+        <div class="kpi"><div class="label">Beste grill cut</div><div class="value" id="kpiGrill">-</div></div>
+        <div class="kpi"><div class="label">Beste low & slow</div><div class="value" id="kpiSlow">-</div></div>
+        <div class="kpi"><div class="label">Beste allround</div><div class="value" id="kpiAllround">-</div></div>
+      </div>
+      <div class="card">
+        <div class="title">Chef-advies</div>
+        <div class="small">Logica: collageen ≥ 4 = low & slow / BBQ, malsheid ≥ 4 + vet ≥ 4 = premium grill, malsheid ≥ 4 = grill / bakken.</div>
+      </div>
+      <div class="title" style="margin:14px 4px 8px">Aanbevolen cuts</div>
+      <div id="cutList"></div>
+    </section>
 
-<div class="hero">
-  <h1>ChefCuts</h1>
+    <section id="screen-heatmap" class="hidden">
+      <div class="card">
+        <div class="title">Heatmap per cut</div>
+        <div class="small">Groen = hoog, geel = midden, rood = laag.</div>
+      </div>
+      <div id="heatmapList"></div>
+    </section>
+
+    <section id="screen-gerechten" class="hidden">
+      <div class="card">
+        <div class="title">Gerechtenbibliotheek</div>
+        <div class="small">Top gerechten per cut – handig voor productontwikkeling en menukaartkeuze.</div>
+      </div>
+      <div id="recipeList"></div>
+    </section>
+
+    <section id="screen-info" class="hidden">
+      <div class="card">
+        <div class="title">Van prototype naar echte iPhone-app</div>
+        <ul class="tight">
+          <li>SwiftUI native app voor App Store of intern gebruik</li>
+          <li>Power Apps voor snelle zakelijke uitrol</li>
+          <li>PWA als tussenoplossing: voeg toe aan beginscherm op iPhone</li>
+        </ul>
+        <div class="small">Dit prototype is mobiel geoptimaliseerd en kan direct als ontwerp- en functioneel startpunt dienen.</div>
+      </div>
+    </section>
+  </div>
+  <div class="tabs"><div class="tabsin">
+    <div class="tab active" data-screen="dashboard">Dashboard</div>
+    <div class="tab" data-screen="heatmap">Heatmap</div>
+    <div class="tab" data-screen="gerechten">Gerechten</div>
+    <div class="tab" data-screen="info">Info</div>
+  </div></div>
 </div>
-
-<div class="wrap">
-
-<div class="filter">
-<select id="primalFilter"><option value="Alle">Alle</option></select>
-<select id="methodFilter"><option value="Alle">Alle</option></select>
-</div>
-
-<div id="cutList"></div>
-
-</div>
-
-</div>
-
 <script>
 
-let cuts = [];
+  
+et cuts = [];
 
 fetch('cuts_full_v8_pro.json')
 .then(res => res.json())
 .then(data => {
 
-  // 🔥 mapping naar jouw originele structuur
-  cuts = data.cuts.map(c => ({
-    primal: c.primal,
-    cut: c.cut_en,
-    nl: c.cut_nl,
-    temp: c.kerntemperatuur,
-    method: Array.isArray(c.bereidingswijze) ? c.bereidingswijze.join(', ') : c.bereidingswijze,
-    m: c.malsheid,
-    v: c.vet,
-    c: c.collageen,
-    advies: c.auto_advies,
-    recipes: c.gerechten || []
-  }));
+  cuts = data.cuts;
 
   init();
 
 });
 
-const primalFilter = document.getElementById('primalFilter');
-const methodFilter = document.getElementById('methodFilter');
-
 function init(){
 
-  [...new Set(cuts.map(c=>c.primal))].sort().forEach(v=>{
-    const o=document.createElement('option');
-    o.value=v;
-    o.textContent='USDA primal: '+v;
-    primalFilter.appendChild(o);
-  });
+  const primalFilter = document.getElementById('primalFilter');
 
-  [...new Set(cuts.map(c=>c.method))].sort().forEach(v=>{
+  [...new Set(cuts.map(c => c.primal))].forEach(v=>{
     const o=document.createElement('option');
     o.value=v;
-    o.textContent='Bereidingswijze: '+v;
-    methodFilter.appendChild(o);
+    o.textContent=v;
+    primalFilter.appendChild(o);
   });
 
   render();
 }
 
-function filtered(){
-  const pf=primalFilter.value, mf=methodFilter.value;
-  return cuts.filter(c => (pf==='Alle'||c.primal===pf) && (mf==='Alle'||c.method===mf));
-}
-
-function bestGrill(arr){return [...arr].sort((a,b)=>(b.m+b.v)-(a.m+a.v) || a.c-b.c)[0]}
-function bestSlow(arr){return [...arr].sort((a,b)=>b.c-a.c || b.v-a.v)[0]}
-function bestAllround(arr){return [...arr].sort((a,b)=>((b.m+b.v+(6-Math.abs(b.c-3)))-(a.m+a.v+(6-Math.abs(a.c-3)))))[0]}
-
 function render(){
-
-  const arr=filtered();
-
-  document.getElementById('kpiCount').textContent=arr.length;
-  document.getElementById('kpiGrill').textContent=(bestGrill(arr)||{}).cut||'-';
-  document.getElementById('kpiSlow').textContent=(bestSlow(arr)||{}).cut||'-';
-  document.getElementById('kpiAllround').textContent=(bestAllround(arr)||{}).cut||'-';
 
   const list = document.getElementById('cutList');
   list.innerHTML='';
 
-  [...arr].sort((a,b)=>(b.m+b.v+b.c)-(a.m+a.v+a.c)).forEach(c=>{
+  cuts.slice(0,50).forEach(c=>{
 
     const d=document.createElement('div');
     d.className='cut';
 
-    d.innerHTML=`
-      <div style="font-weight:800;font-size:18px">${c.cut}</div>
-      <div class="small">${c.nl} · ${c.primal}</div>
-      <div class="meta">
-        <span class="pill">${c.temp}</span>
-        <span class="pill">${c.method}</span>
-        <span class="pill">${c.advies}</span>
-      </div>
-      <div class="heat">
-        <div class="score s${c.m}">Malsheid<br>${c.m}</div>
-        <div class="score s${c.v}">Vet<br>${c.v}</div>
-        <div class="score s${c.c}">Collageen<br>${c.c}</div>
-      </div>
-      <div class="recipes">
-        <b>Top gerechten:</b> ${c.recipes.join(', ')}
-      </div>
+    d.innerHTML = `
+      <b>${c.cut_nl}</b><br>
+      ${c.diersoort} - ${c.primal}<br>
+      ${c.auto_advies}
     `;
 
     list.appendChild(d);
 
   });
-
 }
-
-primalFilter.addEventListener('change',render);
-methodFilter.addEventListener('change',render);
-
-render();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
+
+const primalFilter = document.getElementById('primalFilter');
+const methodFilter = document.getElementById('methodFilter');
+[...new Set(cuts.map(c=>c.primal))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent='USDA primal: '+v;primalFilter.appendChild(o)});
+[...new Set(cuts.map(c=>c.method))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent='Bereidingswijze: '+v;methodFilter.appendChild(o)});
+
+function filtered(){
+  const pf=primalFilter.value, mf=methodFilter.value;
+  return cuts.filter(c => (pf==='Alle'||c.primal===pf) && (mf==='Alle'||c.method===mf));
+}
+function bestGrill(arr){return [...arr].sort((a,b)=>(b.m+b.v)-(a.m+a.v) || a.c-b.c)[0]}
+function bestSlow(arr){return [...arr].sort((a,b)=>b.c-a.c || b.v-a.v)[0]}
+function bestAllround(arr){return [...arr].sort((a,b)=>((b.m+b.v+(6-Math.abs(b.c-3)))-(a.m+a.v+(6-Math.abs(a.c-3)))))[0]}
+function render(){
+  const arr=filtered();
+  document.getElementById('kpiCount').textContent=arr.length;
+  document.getElementById('kpiGrill').textContent=(bestGrill(arr)||{}).cut||'-';
+  document.getElementById('kpiSlow').textContent=(bestSlow(arr)||{}).cut||'-';
+  document.getElementById('kpiAllround').textContent=(bestAllround(arr)||{}).cut||'-';
+  const list = document.getElementById('cutList'); list.innerHTML='';
+  [...arr].sort((a,b)=>(b.m+b.v+b.c)-(a.m+a.v+a.c)).forEach(c=>{
+    const d=document.createElement('div'); d.className='cut';
+    d.innerHTML=`<div style="font-weight:800;font-size:18px">${c.cut}</div>
+    <div class="small">${c.nl} · ${c.primal}</div>
+    <div class="meta"><span class="pill">${c.temp}</span><span class="pill">${c.method}</span><span class="pill">${c.advies}</span></div>
+    <div class="heat"><div class="score s${c.m}">Malsheid<br>${c.m}</div><div class="score s${c.v}">Vet<br>${c.v}</div><div class="score s${c.c}">Collageen<br>${c.c}</div></div>
+    <div class="recipes"><b>Top gerechten:</b> ${c.recipes.join(', ')}</div>`;
+    list.appendChild(d);
+  });
+  const heat = document.getElementById('heatmapList'); heat.innerHTML='';
+  arr.forEach(c=>{
+    const d=document.createElement('div'); d.className='cut';
+    d.innerHTML=`<div style="font-weight:800">${c.cut}</div><div class="small">${c.nl}</div><div class="heat"><div class="score s${c.m}">Malsheid<br>${c.m}</div><div class="score s${c.v}">Vet<br>${c.v}</div><div class="score s${c.c}">Collageen<br>${c.c}</div></div>`;
+    heat.appendChild(d);
+  });
+  const recipes = document.getElementById('recipeList'); recipes.innerHTML='';
+  arr.forEach(c=>{
+    const d=document.createElement('div'); d.className='cut';
+    d.innerHTML=`<div style="font-weight:800">${c.cut}</div><div class="small">${c.nl} · ${c.method} · ${c.temp}</div><ul class="tight">${c.recipes.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+    recipes.appendChild(d);
+  });
+}
+primalFilter.addEventListener('change',render); methodFilter.addEventListener('change',render);
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  ['dashboard','heatmap','gerechten','info'].forEach(id=>document.getElementById('screen-'+id).classList.add('hidden'));
+  document.getElementById('screen-'+t.dataset.screen).classList.remove('hidden');
+}));
+render();
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 </script>
 </body>
 </html>
