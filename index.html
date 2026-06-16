@@ -101,6 +101,7 @@
   </div></div>
 </div>
 <script>
+
 let cuts = [];
 
 fetch('cuts_full_v8_pro.json')
@@ -121,61 +122,124 @@ fetch('cuts_full_v8_pro.json')
     recipes: c.gerechten || []
   }));
 
-  // 🔥 BELANGRIJK: bestaande code laten draaien
   startApp();
 
 });
 
 const primalFilter = document.getElementById('primalFilter');
 const methodFilter = document.getElementById('methodFilter');
-[...new Set(cuts.map(c=>c.primal))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent='USDA primal: '+v;primalFilter.appendChild(o)});
-[...new Set(cuts.map(c=>c.method))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent='Bereidingswijze: '+v;methodFilter.appendChild(o)});
+
+function startApp(){
+
+  // ✅ filters vullen NA data load
+  [...new Set(cuts.map(c=>c.primal))].sort().forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent='USDA primal: '+v;
+    primalFilter.appendChild(o)
+  });
+
+  [...new Set(cuts.map(c=>c.method))].sort().forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent='Bereidingswijze: '+v;
+    methodFilter.appendChild(o)
+  });
+
+  render();
+}
 
 function filtered(){
   const pf=primalFilter.value, mf=methodFilter.value;
   return cuts.filter(c => (pf==='Alle'||c.primal===pf) && (mf==='Alle'||c.method===mf));
 }
+
 function bestGrill(arr){return [...arr].sort((a,b)=>(b.m+b.v)-(a.m+a.v) || a.c-b.c)[0]}
 function bestSlow(arr){return [...arr].sort((a,b)=>b.c-a.c || b.v-a.v)[0]}
 function bestAllround(arr){return [...arr].sort((a,b)=>((b.m+b.v+(6-Math.abs(b.c-3)))-(a.m+a.v+(6-Math.abs(a.c-3)))))[0]}
+
 function render(){
+
   const arr=filtered();
+
   document.getElementById('kpiCount').textContent=arr.length;
   document.getElementById('kpiGrill').textContent=(bestGrill(arr)||{}).cut||'-';
   document.getElementById('kpiSlow').textContent=(bestSlow(arr)||{}).cut||'-';
   document.getElementById('kpiAllround').textContent=(bestAllround(arr)||{}).cut||'-';
-  const list = document.getElementById('cutList'); list.innerHTML='';
+
+  const list = document.getElementById('cutList');
+  list.innerHTML='';
+
   [...arr].sort((a,b)=>(b.m+b.v+b.c)-(a.m+a.v+a.c)).forEach(c=>{
-    const d=document.createElement('div'); d.className='cut';
-    d.innerHTML=`<div style="font-weight:800;font-size:18px">${c.cut}</div>
-    <div class="small">${c.nl} · ${c.primal}</div>
-    <div class="meta"><span class="pill">${c.temp}</span><span class="pill">${c.method}</span><span class="pill">${c.advies}</span></div>
-    <div class="heat"><div class="score s${c.m}">Malsheid<br>${c.m}</div><div class="score s${c.v}">Vet<br>${c.v}</div><div class="score s${c.c}">Collageen<br>${c.c}</div></div>
-    <div class="recipes"><b>Top gerechten:</b> ${c.recipes.join(', ')}</div>`;
+    const d=document.createElement('div');
+    d.className='cut';
+
+    d.innerHTML=`
+      <div style="font-weight:800;font-size:18px">${c.cut}</div>
+      <div class="small">${c.nl} · ${c.primal}</div>
+      <div class="meta"><span class="pill">${c.temp}</span><span class="pill">${c.method}</span><span class="pill">${c.advies}</span></div>
+      <div class="heat"><div class="score s${c.m}">Malsheid<br>${c.m}</div><div class="score s${c.v}">Vet<br>${c.v}</div><div class="score s${c.c}">Collageen<br>${c.c}</div></div>
+      <div class="recipes"><b>Top gerechten:</b> ${c.recipes.join(', ')}</div>
+    `;
+
     list.appendChild(d);
   });
-  const heat = document.getElementById('heatmapList'); heat.innerHTML='';
+
+  const heat = document.getElementById('heatmapList');
+  heat.innerHTML='';
+
   arr.forEach(c=>{
-    const d=document.createElement('div'); d.className='cut';
-    d.innerHTML=`<div style="font-weight:800">${c.cut}</div><div class="small">${c.nl}</div><div class="heat"><div class="score s${c.m}">Malsheid<br>${c.m}</div><div class="score s${c.v}">Vet<br>${c.v}</div><div class="score s${c.c}">Collageen<br>${c.c}</div></div>`;
+    const d=document.createElement('div');
+    d.className='cut';
+
+    d.innerHTML=`
+      <div style="font-weight:800">${c.cut}</div>
+      <div class="small">${c.nl}</div>
+      <div class="heat">
+        <div class="score s${c.m}">Malsheid<br>${c.m}</div>
+        <div class="score s${c.v}">Vet<br>${c.v}</div>
+        <div class="score s${c.c}">Collageen<br>${c.c}</div>
+      </div>
+    `;
+
     heat.appendChild(d);
   });
-  const recipes = document.getElementById('recipeList'); recipes.innerHTML='';
+
+  const recipes = document.getElementById('recipeList');
+  recipes.innerHTML='';
+
   arr.forEach(c=>{
-    const d=document.createElement('div'); d.className='cut';
-    d.innerHTML=`<div style="font-weight:800">${c.cut}</div><div class="small">${c.nl} · ${c.method} · ${c.temp}</div><ul class="tight">${c.recipes.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+    const d=document.createElement('div');
+    d.className='cut';
+
+    d.innerHTML=`
+      <div style="font-weight:800">${c.cut}</div>
+      <div class="small">${c.nl} · ${c.method} · ${c.temp}</div>
+      <ul class="tight">${c.recipes.map(r=>`<li>${r}</li>`).join('')}</ul>
+    `;
+
     recipes.appendChild(d);
   });
 }
-primalFilter.addEventListener('change',render); methodFilter.addEventListener('change',render);
+
+primalFilter.addEventListener('change',render);
+methodFilter.addEventListener('change',render);
 
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
-  ['dashboard','heatmap','gerechten','info'].forEach(id=>document.getElementById('screen-'+id).classList.add('hidden'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+
+  ['dashboard','heatmap','gerechten','info'].forEach(id=>
+    document.getElementById('screen-'+id).classList.add('hidden')
+  );
+
   document.getElementById('screen-'+t.dataset.screen).classList.remove('hidden');
 }));
-render();
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
 </script>
 </body>
 </html>
